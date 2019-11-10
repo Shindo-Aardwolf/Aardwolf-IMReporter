@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<blowtorch xmlversion="2">
+	<plugins>
+		<plugin name="Shindo Global Quest Helper" id="919">
+			<author>Shindo</author>
+			<description><![CDATA[
+				<html>
+					<head>
+						<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+						<title>Shindo's Instinct and Mastery Reporting Plugin</title>
+						<style type="text/css">
+							body {
+							color: #999;
+							}
+						</style>
+					</head>
+
+					<body>
+						<h3>Instinct and Mastery Reporter Summary
+						</h3>
+						<p>This plugin reports your mastery or instinct to a channel specified or
+							to the room if no channel is specified</p>
+						<p>This work is based off of Mendaloth's instinct and mastery reporter.</p>
+					</body>
+				</html>
+				]]>
+			</description>
+			<windows />
+			<aliases>
+				<alias pre="^irep ?(.*?)$" post="/startInstinctReport(&quot;$1&quot;)" enabled="true"/>
+				<alias pre="^mrep ?(.*?)$" post="/startMasteryReport(&quot;$1&quot;)" enabled="true"/>
+			</aliases>
+			<triggers>
+				<trigger title="instinctdata"
+					pattern="^.{11}(\w+\s?\w+)\s+(\d{1,3}\%|N\/A)\s+(\d{1,3})\s+(\d{1,4})\s+(\d{1,3}\,\d{1,3}\,\d{1,3})$"
+					regexp="true" sequence="1" group="instinct_capture" keepEvaluating="true">
+					<replace fireWhen="always"/>
+					<script function="processInstinctDataLine" fireWhen="always"/>
+					<gag />
+				</trigger>
+				<trigger title="instincttrains"
+					pattern="^You have (.*) trains? available for instinct\.$"
+					regexp="true" sequence="1" group="instinct_capture" keepEvaluating="true">
+					<replace fireWhen="always"/>
+					<script function="processInstinctTrainsLine" fireWhen="always"/>
+					<gag />
+				</trigger>
+				<trigger title="instinctgold"
+					pattern="^You have (.*) gold available for instinct\.$"
+					regexp="true" sequence="1" group="instinct_capture" keepEvaluating="true">
+					<replace fireWhen="always"/>
+					<script function="processInstinctGoldLine" fireWhen="always"/>
+					<gag />
+				</trigger>
+			</triggers>
+			<script name="bootstrap"><![CDATA[
+				Plugin_Dir = "/Shindo_lua"
+				dofile(GetPluginInstallDirectory()..Plugin_Dir.."/Shindo_IMReporter.lua")
+				]]>
+			</script>
+			<timers />
+		</plugin>
+	</plugins>
+</blowtorch>
+
+
