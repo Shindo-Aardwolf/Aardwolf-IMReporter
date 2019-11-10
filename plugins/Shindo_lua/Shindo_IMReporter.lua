@@ -34,7 +34,7 @@ local colourArray = {
 }
 
 -- Local Variables
-local version = "0.0.2"
+local version = "0.0.3"
 local InstinctSkills = {}
 local MasteryDamtypes = {}
 local AvailableGold = "0"
@@ -42,6 +42,7 @@ local AvailableQP = "0"
 local AvailableTrains = "0"
 local ReportingChannel = ""
 
+--[[Processing INSTINCT]]
 function processInstinctDataLine(name, line, wildcards)
 	tempdata = {}
 	skillname = wildcards["1"]
@@ -89,6 +90,53 @@ function startInstinctReportC(channel)
 	ReportingChannel = channel
 	EnableTriggerGroup("instinct_capture", true)
 	SendToServer("instinct")
+end
+
+--[[ Processing Mastery ]]
+function processMasteryDataLine(name, line, wildcards)
+	tempdata = {}
+	masteryType = wildcards["1"]
+	masteryAmount  = wildcards["2"]
+	if masteryAmount ~= "0" then
+		tempdata[masteryType] = masteryAmount
+		table.insert(MasteryDamtypes, tempdata)
+	end
+end
+
+function processMasteryQPLine(name, line, wildcards)
+	AvailableQP = wildcards["1"]
+end
+
+function processMasteryGoldLine(name, line, wildcards)
+	AvailableGold = wildcards["1"]
+	EnableTriggerGroup("mastery_capture", false)
+	showMastery()
+end
+
+function showMastery()
+	local outstring = ""
+	for number, SubTable in pairs(MasteryDamtypes) do
+		for MasteryType, MasteryAmount in pairs(SubTable) do
+			if outstring == "" then
+				outstring = string.format("[%s, %s]", MasteryType, MasteryAmount)
+			else
+				outstring = string.format("%s, [%s, %s]", outstring, MasteryType, MasteryAmount)
+			end
+		end
+	end
+	SendToServer(string.format("%s %s %s qp and %s gold available for instinct.",
+	ReportingChannel, outstring, AvailableQP, AvailableGold))
+end
+
+function startMasteryReport()
+	startMasteryReportC("say")
+end
+
+function startMasteryReportC(channel)
+	MasteryDamtypes = {}
+	ReportingChannel = channel
+	EnableTriggerGroup("mastery_capture", true)
+	SendToServer("mastery")
 end
 
 function OnBackgroundStartup()
