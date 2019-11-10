@@ -27,8 +27,10 @@
 			</description>
 			<windows />
 			<aliases>
-				<alias pre="^irep ?(.*?)$" post="/startInstinctReport(&quot;$1&quot;)" enabled="true"/>
-				<alias pre="^mrep ?(.*?)$" post="/startMasteryReport(&quot;$1&quot;)" enabled="true"/>
+				<alias pre="^irep (.*?)$" post="/startInstinctReportC(&quot;$1&quot;)" enabled="true"/>
+				<alias pre="^mrep (.*?)$" post="/startMasteryReportC(&quot;$1&quot;)" enabled="true"/>
+				<alias pre="^irep$" post="/startInstinctReport()" enabled="true"/>
+				<alias pre="^mrep$" post="/startMasteryReport()" enabled="true"/>
 			</aliases>
 			<triggers>
 				<trigger title="instinctdata"
@@ -50,6 +52,67 @@
 					regexp="true" sequence="1" group="instinct_capture" keepEvaluating="true">
 					<replace fireWhen="always"/>
 					<script function="processInstinctGoldLine" fireWhen="always"/>
+					<gag />
+				</trigger>
+				<trigger title="instinctgag1"
+					pattern="^                                                   ---- Next Cost ----$"
+					regexp="true" sequence="1" group="instinct_capture" keepEvaluating="true">
+					<replace fireWhen="always"/>
+					<gag />
+				</trigger>
+				<trigger title="instinctgag2"
+					pattern="^           Skill name             Learned Instinct Trains         Gold$"
+					regexp="true" sequence="1" group="instinct_capture" keepEvaluating="true">
+					<replace fireWhen="always"/>
+					<gag />
+				</trigger>
+				<trigger title="instinctgag3"
+					pattern="^---------- ---------------------- ------- -------- ------ ------------$"
+					regexp="true" sequence="1" group="instinct_capture" keepEvaluating="true">
+					<replace fireWhen="always"/>
+					<gag />
+				</trigger>
+				<trigger title="instinctgag4"
+					pattern="^\s*$"
+					regexp="true" sequence="1" group="instinct_capture" keepEvaluating="true">
+					<replace fireWhen="always"/>
+					<gag />
+				</trigger>
+				<trigger title="instinctgag5"
+					pattern="^----------------------------------------------------------------------$"
+					regexp="true" sequence="1" group="instinct_capture" keepEvaluating="true">
+					<replace fireWhen="always"/>
+					<gag />
+				</trigger>
+
+				<trigger title="masterygag1"
+					pattern="^              Mastery QP      Gold$"
+					regexp="true" sequence="1" group="mastery_capture" keepEvaluating="true">
+					<replace fireWhen="always"/>
+					<gag />
+				</trigger>
+				<trigger title="masterygag2"
+					pattern="^Damage Type   Level   Cost    Cost$"
+					regexp="true" sequence="1" group="mastery_capture" keepEvaluating="true">
+					<replace fireWhen="always"/>
+					<gag />
+				</trigger>
+				<trigger title="masterygag3"
+					pattern="^$"
+					regexp="true" sequence="1" group="mastery_capture" keepEvaluating="true">
+					<replace fireWhen="always"/>
+					<gag />
+				</trigger>
+				<trigger title="masterygag4"
+					pattern="^------------- ------- ------- ------------$"
+					regexp="true" sequence="1" group="mastery_capture" keepEvaluating="true">
+					<replace fireWhen="always"/>
+					<gag />
+				</trigger>
+				<trigger title="masterygag5"
+					pattern="^------------------------------------------$"
+					regexp="true" sequence="1" group="mastery_capture" keepEvaluating="true">
+					<replace fireWhen="always"/>
 					<gag />
 				</trigger>
 			</triggers>

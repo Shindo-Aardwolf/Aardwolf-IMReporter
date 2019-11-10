@@ -34,18 +34,20 @@ local colourArray = {
 }
 
 -- Local Variables
-local version = "0.0.1"
+local version = "0.0.2"
 local InstinctSkills = {}
 local MasteryDamtypes = {}
 local AvailableGold = "0"
 local AvailableQP = "0"
 local AvailableTrains = "0"
+local ReportingChannel = ""
 
 function processInstinctDataLine(name, line, wildcards)
+	tempdata = {}
 	skillname = wildcards["1"]
 	skillamount = wildcards["3"]
 	if skillamount ~= "0" then
-		tempdata = {skillname, skillamount}
+		tempdata[skillname] = skillamount
 		table.insert(InstinctSkills, tempdata)
 	end
 end
@@ -62,15 +64,31 @@ end
 
 function showInstincts()
 	local outstring = ""
-	for SkillName, SkillAmount in pairs(InstinctSkills) do
-		if outstring == "" then
-			outstring == string.format("[%s, %s]", SkillName, SkillAmount)
-		else
-			outstring = string.format("%s, [%s, %s]", outstring, SkillName, SkillAmount)
+	for number, SubTable in pairs(InstinctSkills) do
+		for SkillName, SkillAmount in pairs(SubTable) do
+			if outstring == "" then
+				outstring = string.format("[%s, %s]", SkillName, SkillAmount)
+			else
+				outstring = string.format("%s, [%s, %s]", outstring, SkillName, SkillAmount)
+			end
 		end
 	end
-	Note(outstring .. "\n")
-	Note(string.format("%s trains and %s gold available for instinct\n."), AvailableTrains, AvailableGold)
+	--Note(outstring .. "\n")
+	--Note(string.format("%s\n%s trains and %s gold available for instinct.\n",
+	--outstring, AvailableTrains, AvailableGold))
+	SendToServer(string.format("%s %s %s trains and %s gold available for instinct.",
+	ReportingChannel, outstring, AvailableTrains, AvailableGold))
+end
+
+function startInstinctReport()
+	startInstinctReportC("say")
+end
+
+function startInstinctReportC(channel)
+	InstinctSkills = {}
+	ReportingChannel = channel
+	EnableTriggerGroup("instinct_capture", true)
+	SendToServer("instinct")
 end
 
 function OnBackgroundStartup()
