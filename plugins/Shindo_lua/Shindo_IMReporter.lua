@@ -34,7 +34,7 @@ local colourArray = {
 }
 
 -- Local Variables
-local version = "0.0.3"
+local version = "0.1.0"
 local InstinctSkills = {}
 local MasteryDamtypes = {}
 local AvailableGold = "0"
@@ -74,10 +74,7 @@ function showInstincts()
 			end
 		end
 	end
-	--Note(outstring .. "\n")
-	--Note(string.format("%s\n%s trains and %s gold available for instinct.\n",
-	--outstring, AvailableTrains, AvailableGold))
-	SendToServer(string.format("%s %s %s trains and %s gold available for instinct.",
+	SendToServer(string.format("%s %s with %s trains and %s gold available for instinct.",
 	ReportingChannel, outstring, AvailableTrains, AvailableGold))
 end
 
@@ -105,12 +102,12 @@ end
 
 function processMasteryQPLine(name, line, wildcards)
 	AvailableQP = wildcards["1"]
+	EnableTriggerGroup("mastery_capture", false)
+	showMastery()
 end
 
 function processMasteryGoldLine(name, line, wildcards)
 	AvailableGold = wildcards["1"]
-	EnableTriggerGroup("mastery_capture", false)
-	showMastery()
 end
 
 function showMastery()
@@ -124,7 +121,7 @@ function showMastery()
 			end
 		end
 	end
-	SendToServer(string.format("%s %s %s qp and %s gold available for instinct.",
+	SendToServer(string.format("%s %s with %s qp and %s gold available for instinct.",
 	ReportingChannel, outstring, AvailableQP, AvailableGold))
 end
 
