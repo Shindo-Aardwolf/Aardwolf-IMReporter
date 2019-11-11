@@ -121,7 +121,7 @@ function showMastery()
 			end
 		end
 	end
-	SendToServer(string.format("%s %s with %s qp and %s gold available for instinct.",
+	SendToServer(string.format("%s %s with %s qp and %s gold available for mastery.",
 	ReportingChannel, outstring, AvailableQP, AvailableGold))
 end
 
